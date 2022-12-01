@@ -14,6 +14,12 @@ export type Freet = {
   dateCreated: Date;
   content: string;
   dateModified: Date;
+  likes: number;
+  comments: number;
+  refreets: number;
+  likers: [Types.ObjectId];
+  commentFreets: [Types.ObjectId];
+  refreeters: [Types.ObjectId];
 };
 
 export type PopulatedFreet = {
@@ -49,6 +55,33 @@ const FreetSchema = new Schema<Freet>({
   dateModified: {
     type: Date,
     required: true
+  },
+  // Add likes field to the schema
+  likes: {
+    type: Number,
+    default: 0
+  },
+  // Add comments field to the schema
+  comments: {
+    type: Number,
+    default: 0
+  },
+  // Add refreets field to the schema
+  refreets: {
+    type: Number,
+    default: 0
+  },
+  likers: {
+    type: [Schema.Types.ObjectId],
+    default: []
+  },
+  commentFreets: {
+    type: [Schema.Types.ObjectId],
+    default: []
+  },
+  refreeters: {
+    type: [Schema.Types.ObjectId],
+    default: []
   }
 });
 

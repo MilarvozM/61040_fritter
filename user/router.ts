@@ -148,4 +148,27 @@ router.delete(
   }
 );
 
+router.put(
+  '/',
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isValidUsername,
+    userValidator.isCurrentSessionUserExists
+  ],
+  async (req: Request, res: Response) => {
+    const followerId = (req.session.userId as string) ?? '';
+    const followedId = (req.body.username as string) ?? '';
+    const isNowFollowed = await UserCollection.followUser(followedId, followerId);
+    if (isNowFollowed) {
+      res.status(200).json({
+        message: 'You have sucessfully followed.'
+      });
+    } else {
+      res.status(410).json({
+        message: 'Failed to follow. You have already followed.'
+      });
+    }
+  }
+);
+
 export {router as userRouter};

@@ -91,6 +91,21 @@ class UserCollection {
     const user = await UserModel.deleteOne({_id: userId});
     return user !== null;
   }
+
+  static async followUser(followedId: Types.ObjectId | string, followerId: Types.ObjectId | string): Promise<boolean> {
+    const follower = UserModel.findOne({_id: followerId});
+    const followed = UserModel.findOne({_id: followedId});
+    if ((await follower).following.includes(followedId) || (await followed).followers.includes(followerId)) {
+      return false;
+    }
+
+    (await follower).following.push(followedId);
+    (await follower).followCount++;
+
+    (await followed).followers.push(followerId);
+    (await followed).followerCount++;
+    return true;
+  }
 }
 
 export default UserCollection;
